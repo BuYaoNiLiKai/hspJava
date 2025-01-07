@@ -4,16 +4,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Vector;
 
-public class MyPanel extends JPanel implements KeyListener {
-    MyTank tank = null;
-    Tank[] enemys = null;
+public class MyPanel extends JPanel implements KeyListener, Runnable {
+    Hero hero = null;
+    Vector<EnemyTank> enemys = null;
+    int enemyNum = 4;
 
     public MyPanel() {
-        tank = new MyTank(100, 100, 0, 10);
-        enemys = new Tank[3];
-        for (int i = 0; i < enemys.length; i++) {
-            enemys[i] = new Tank(tank.getX() + 60 * (i + 1), tank.getY(), i, 10);
+        hero = new Hero(100, 100, 0, 10);
+        enemys = new Vector<>();
+        for (int i = 0; i < enemyNum; i++) {
+            EnemyTank enemyTank = new EnemyTank(hero.getX() + 60 * (i + 1), hero.getY(), i % 4, 10);
+            Shot shot = new Shot(enemyTank.getX(), enemyTank.getY(), enemyTank.getDirection());
+            enemyTank.shots.add(shot);
+            new Thread(shot).start();
+            enemys.add(enemyTank);
         }
     }
 
@@ -22,9 +28,20 @@ public class MyPanel extends JPanel implements KeyListener {
     public void paint(Graphics g) {
         super.paint(g);
         g.fillRect(0, 0, 1000, 750); //填充矩形
-        drawTank(tank.getX(), tank.getY(), g, tank.getDirection(), 1);
-        for (Tank enemy : enemys) {
-            drawTank(enemy.getX() + 60, enemy.getY(), g, enemy.getDirection(), 0);
+        drawTank(hero.getX(), hero.getY(), g, hero.getDirection(), 1);
+        if (hero.shot != null && hero.shot.isLive) {
+            g.draw3DRect(hero.shot.getX(), hero.shot.getY(), 5, 5, false);
+        }
+        for (EnemyTank enemy : enemys) {
+            drawTank(enemy.getX(), enemy.getY(), g, enemy.getDirection(), 0);
+            for (Shot shot : enemy.shots) {
+                if (shot.isLive) {
+                    g.draw3DRect(shot.getX(), shot.getY(), 5, 5, false);
+                } else {
+                    enemy.shots.remove(shot);
+                }
+
+            }
         }
 
     }
@@ -92,22 +109,39 @@ public class MyPanel extends JPanel implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_W) {
-            tank.moveUP();
+            hero.moveUP();
         }
         if (e.getKeyCode() == KeyEvent.VK_S) {
-            tank.moveDown();
+            hero.moveDown();
         }
         if (e.getKeyCode() == KeyEvent.VK_A) {
-            tank.moveLeft();
+            hero.moveLeft();
         }
         if (e.getKeyCode() == KeyEvent.VK_D) {
-            tank.moveRight();
+            hero.moveRight();
+        }
+        if (e.getKeyCode() == KeyEvent.VK_J) {
+            System.out.println("开始设计");
+            hero.shotEnemy();
         }
         this.repaint();
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            this.repaint();
+        }
 
     }
 }

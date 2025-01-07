@@ -10,6 +10,7 @@ public class MyFrame extends JFrame {
 
     public MyFrame() {
         panel = new MyPanel();
+        new Thread(panel).start();
         this.add(panel);
         this.setSize(1000, 750);
         this.addKeyListener(panel);

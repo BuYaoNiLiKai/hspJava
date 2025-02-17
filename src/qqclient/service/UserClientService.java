@@ -1,9 +1,11 @@
 package qqclient.service;
 
-import qqclient.common.Message;
-import qqclient.common.MessageType;
-import qqclient.common.User;
 
+import qqcommon.Message;
+import qqcommon.MessageType;
+import qqcommon.User;
+
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
@@ -31,20 +33,66 @@ public class UserClientService {
                 // 登录成功
                 // 创建一个和服务器保持通信饿的线程 -> 连接类
                 result = true;
-                new ClientConnectServerThread(socket).start();
+                ClientConnectServerThread clientConnectServerThread = new ClientConnectServerThread(socket);
+                clientConnectServerThread.start();
+
+                ManageClientConnectServiceThread.add(userID, clientConnectServerThread);
                 // 为了扩展 将线程放入到集合当中
             } else {
                 // 登录失败
                 socket.close();
             }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         return result;
+    }
+
+    public void onlineUsers() {
+        // 返回在线用户列表
+        Message message = new Message();
+        message.setMsgType(MessageType.MESSAGE_GET_ONLINE_USERS);
+        message.setFromUser(user.getUserId());
+
+        // 发送给服务器
+        try {
+            String id = user.getUserId();
+            System.out.println("userID:" + id);
+            System.out.println("你好啊");
+            ClientConnectServerThread clientConnectServerThread = ManageClientConnectServiceThread.get(id);
+            Socket socket = clientConnectServerThread.getSocket();
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            System.out.println("客户端发送出请求");
+            out.writeObject(message);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+
+    }
+
+    // 退出客户端 并给服务器发送一个退出系统的message对象
+    public void logout() {
+        Message message = new Message();
+        message.setMsgType(MessageType.MESSAGE_CLIENT_EXIT);
+        message.setFromUser(user.getUserId());
+        ObjectOutputStream out = null;
+        try {
+            out = new ObjectOutputStream(socket.getOutputStream());
+            out.writeObject(message);
+            System.out.println("用户" + user.getUserId() + "退出系统");
+            System.exit(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 
     public static void main(String[] args) {
 
     }
+
 }

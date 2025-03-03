@@ -1,0 +1,69 @@
+<?xml version="1.0" standalone="no" ?>
+
+<!--
+<!DOCTYPE c3p0-config [
+   <!ENTITY extra SYSTEM "https://www.mchange.com/projects/c3p0/extra.xml">
+]>
+-->
+
+<c3p0-config>
+    <!--    <default-config>-->
+    <!--        &lt;!&ndash; <property name="automaticTestTable">con_test</property> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="checkoutTimeout">30000</property> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="idleConnectionTestPeriod">30</property> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="initialPoolSize">10</property> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="maxIdleTime">30</property> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="maxIdleTimeExcessConnections">10</property> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="maxConnectionAge">60</property> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="propertyCycle">1</property> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="maxPoolSize">25</property> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="minPoolSize">5</property> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="maxStatements">0</property> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="maxStatementsPerConnection">5</property> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="maxAdministrativeTaskTime">4</property> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="connectionCustomizerClassName">com.mchange.v2.c3p0.test.TestConnectionCustomizer</property> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="unreturnedConnectionTimeout">15</property> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="debugUnreturnedConnectionStackTraces">true</property> &ndash;&gt;-->
+
+    <!--        &lt;!&ndash; <property name="dataSourceName">poop</property> &ndash;&gt;-->
+
+    <!--        &lt;!&ndash; <property name="driverClass">org.postgresql.Driver</property> &ndash;&gt;-->
+    <!--        &lt;!&ndash; <property name="jdbcUrl">jdbc:postgresql://localhost/c3p0-test</property> &ndash;&gt;-->
+
+    <!--        <extensions>-->
+    <!--            &lt;!&ndash; <property name="myXmlKey">myXmlVal</property> &ndash;&gt;-->
+    <!--            &lt;!&ndash; <property name="myKey">myOverriddenVal</property> &ndash;&gt;-->
+    <!--        </extensions>-->
+
+
+    <!--        <user-overrides user="swaldman">-->
+    <!--            &lt;!&ndash;-->
+    <!--            <property name="unreturnedConnectionTimeout">5</property>-->
+    <!--            <property name="debugUnreturnedConnectionStackTraces">true</property>-->
+    <!--            &ndash;&gt;-->
+    <!--            &lt;!&ndash; <property name="preferredTestQuery">select poop from doop</property> &ndash;&gt;&lt;!&ndash; intentionally broken &ndash;&gt;-->
+    <!--        </user-overrides>-->
+
+    <!--        &lt;!&ndash;   &extra; &ndash;&gt;-->
+
+    <!--    </default-config>-->
+
+
+    <named-config name="potato">
+        <property name="driverClass">com.mysql.jdbc.Driver</property>
+        <property name="jdbcUrl">jdbc:mysql://localhost:3306/zpc_db2</property>
+        <property name="user">root</property>
+        <property name="maxStatements">500</property>
+
+
+        <property name="password">zpc521..00</property>
+        <property name="initialPoolSize">10</property>
+        <property name="minPoolSize">5</property>
+        <property name="dataSourceName">scoop</property>
+        <!--        <user-overrides user="poop">-->
+        <!--            <property name="maxStatements">300</property>-->
+        <!--        </user-overrides>-->
+    </named-config>
+
+
+</c3p0-config>
